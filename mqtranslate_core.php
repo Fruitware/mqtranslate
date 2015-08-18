@@ -82,8 +82,12 @@ function qtrans_init() {
 	if(defined('WP_ADMIN') && $q_config['auto_update_mo']) qtrans_updateGettextDatabases();
 	
 	// extract url information
-	$q_config['url_info'] = qtrans_extractURL($_SERVER['REQUEST_URI'], $_SERVER["HTTP_HOST"], isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
-	
+	if (isset($_SERVER["HTTP_HOST"])) {
+		$q_config['url_info'] = qtrans_extractURL($_SERVER['REQUEST_URI'], $_SERVER["HTTP_HOST"], isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+	} else {
+		$q_config['url_info'] = '';
+	}
+
 	// set test cookie
 	if (empty($q_config['disable_client_cookies']) || defined('WP_ADMIN'))
 		setcookie('qtrans_cookie_test', 1, 0, $q_config['url_info']['home'], $q_config['url_info']['host_wo_port'], !empty($q_config['use_secure_cookie']));
